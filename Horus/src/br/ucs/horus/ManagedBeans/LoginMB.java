@@ -10,13 +10,15 @@ import javax.inject.Named;
 public class LoginMB implements Serializable {
 
 	private static final long serialVersionUID = 2645917878819223639L;
-	private String teste = "batata";
+	private String user, password;
 	
 	public LoginMB() {
 		
 	}
 
-	public String getTeste() {
-		return teste;
+	public void login() {
+		
 	}
+	
+	
 }

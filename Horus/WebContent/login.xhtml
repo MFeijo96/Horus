@@ -11,17 +11,9 @@
 	<f:facet name="first">
 		<ui:include src="/template/head.xhtml" />
 	</f:facet>
-	<h:outputStylesheet name="css/all.css"
-		library="fontawesome-free-5.8.1-web" />
-
-	<h:outputStylesheet name="css/bootstrap.min.css"
-		library="bootstrap-4.1.3-dist" />
 	<h:outputStylesheet name="/css/login.css" library="private" />
 </h:head>
 <h:body class="login">
-
-	<h:commandButton id="reverseButton" value=""
-		class="fa fa-arrow-down fa-3x" />
 	<h:panelGroup layout="block" class="container h-100">
 		<h:panelGroup layout="block"
 			class="d-flex justify-content-center h-100">
@@ -39,15 +31,15 @@
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-user"></i></span>
 							</div>
-							<h:inputText type="text" name="" class="form-control input_user"
-								value="" a:placeholder="Usuário" />
+							<h:inputText type="text" class="form-control input_user"
+								value="#{loginMB.user}" a:placeholder="Usuário" />
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<h:inputText type="password" name=""
-								class="form-control input_pass" value="" a:placeholder="Senha" />
+							<h:inputSecret type="password"
+								class="form-control input_pass" value="#{loginMB.password}" a:placeholder="Senha" />
 						</div>
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
@@ -80,6 +72,8 @@
 	<p:outputPanel id="_dialogs_">
 		<ui:insert name="dialogs" />
 	</p:outputPanel>
+	
+	<ui:include src="/template/footer.xhtml" />
 
 </h:body>
 
