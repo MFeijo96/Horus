@@ -1,0 +1,1 @@
+<jsp:forward page="${facesContext.externalContext.requestContextPath}/public/login.jsf" />
