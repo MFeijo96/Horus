@@ -54,6 +54,7 @@ public class LoginMB implements Serializable {
 		if (user == null || user.length() == 0 || password == null || password.length() == 0) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					criarMsg("Login inválido", "Por favor, preencha os campos corretamente", FacesMessage.SEVERITY_ERROR));
+			return null;
 		}
 		
 		if (!userBean.canLogin(user,  password)) { 
