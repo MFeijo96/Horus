@@ -18,7 +18,7 @@ public class UserBean {
 		User user = userDAO.findUser(username);
 		
 		if (user != null && password != null && password.length() > 0) {
-			return true;
+			return user.getPassword().equals(password);
 		}
 		
 		return false;

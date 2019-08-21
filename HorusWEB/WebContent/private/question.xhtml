@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:nl="http://java.sun.com/jsf/composite/primefaces-horus">
+
+<h:head>
+	<f:facet name="first">
+		<ui:include src="/template/head.xhtml" />
+	</f:facet>
+	<h:outputStylesheet name="/css/question.css" library="private" />
+	<h:outputScript name="js/question.js" library="private" />
+</h:head>
+<h:body styleClass="questionBody">
+	<p:growl id="growl" showDetail="true" sticky="true" />
+	<div class="col-12 container-fluid">
+		<div class="col-12 modal-dialog">
+			<div class="col-12 modal-content">
+				<div class="col-12 modal-header flex-column">
+					<h:outputLabel id="qid" styleClass="col-12 label label-warning"
+						value="#{questionMB.question.question}" />
+
+					<div class="row col-12 justify-content-center">
+						<h:graphicImage class="col-12 col-md-10" library="images"
+							name="#{questionMB.questionImage}" />
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="quiz" id="quiz" data-toggle="buttons">
+						<h:outputLabel
+							styleClass="element-animation1 btn btn-lg btn-answer btn-block"
+							value="#{questionMB.question.answers.get(0).answer}" />
+						<h:outputLabel
+							styleClass="element-animation2 btn btn-lg btn-answer btn-block"
+							value="#{questionMB.question.answers.get(1).answer}" />
+						<h:outputLabel
+							styleClass="element-animation3 btn btn-lg btn-answer btn-block"
+							rendered="#{questionMB.question.answers.size() > 2}"
+							value="#{questionMB.question.answers.get(2).answer}" />
+						<h:outputLabel
+							styleClass="element-animation4 btn btn-lg btn-answer btn-block"
+							rendered="#{questionMB.question.answers.size() > 3}"
+							value="#{questionMB.question.answers.get(3).answer}" />
+						<h:outputLabel
+							styleClass="element-animation5 btn btn-lg btn-answer btn-block"
+							rendered="#{questionMB.question.answers.size() > 4}"
+							value="#{questionMB.question.answers.get(4).answer}" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<p:outputPanel id="_dialogs_">
+		<ui:insert name="dialogs" />
+	</p:outputPanel>
+
+	<ui:include src="/template/footer.xhtml" />
+
+</h:body>
+
+</html>

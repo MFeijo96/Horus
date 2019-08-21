@@ -7,6 +7,8 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<jta-data-source>java:jboss/datasources/HorusDS</jta-data-source>
 		<class>br.ucs.horus.models.User</class>
+		<class>br.ucs.horus.models.Question</class>
+		<class>br.ucs.horus.models.Answer</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver"

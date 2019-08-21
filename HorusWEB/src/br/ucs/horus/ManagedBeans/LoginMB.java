@@ -61,7 +61,7 @@ public class LoginMB implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, criarMsg("Erro", "Usuário ou senha inválidos", FacesMessage.SEVERITY_ERROR));
 			return null;
 		} else {
-			return "/public/principal.jsf?faces-redirect=true";
+			return "/private/question.jsf?faces-redirect=true";
 		}
 	}
 
