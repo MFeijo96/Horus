@@ -1,52 +1,86 @@
 package br.ucs.horus.ManagedBeans;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import br.ucs.horus.bean.QuestionBean;
-import br.ucs.horus.bean.UserBean;
-import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
 
 @Named
-@SessionScoped
+@ViewScoped //session
 public class QuestionMB implements Serializable {
 	private static final long serialVersionUID = -1907939408935134046L;
-	
+
 	private Question question;
-	private String questionImage;
-	private int lastIndex = 3;
-	
+	private String questionImage, regressiveCounter;
+	private Integer secondsRemaining;
+	private int lastIndex = 0;
+
 	@EJB
 	private QuestionBean questionBean;
-	
+
 	public Question getQuestion() {
 		return question;
 	}
+
 	public void setQuestion(Question question) {
 		this.question = question;
 	}
-	
+
 	public String getQuestionImage() {
 		return questionImage;
 	}
+
 	public void setQuestionImage(String questionImage) {
 		this.questionImage = questionImage;
 	}
-	@PostConstruct
-    public void init(){
-        question = questionBean.nextQuestion(lastIndex++);
-        questionImage = getImagePath(question);
-    }
+
+	public String getRegressiveCounter() {
+		return regressiveCounter;
+	}
+
+	public void setRegressiveCounter(String regressiveCounter) {
+		this.regressiveCounter = regressiveCounter;
+	}
+
+	public Integer getSecondsRemaining() {
+		return secondsRemaining;
+	}
+
+	public void setSecondsRemaining(Integer secondsRemaining) {
+		this.secondsRemaining = secondsRemaining;
+	}
+
+	public void decrementCounter() {
+		if (secondsRemaining > 0) {
+			secondsRemaining--;
+			int minutes = secondsRemaining / 60;
+			int seconds = secondsRemaining % 60;
+			this.regressiveCounter = String.format("%02d:%02d", minutes, seconds);	
+		} else {
+			// acabou o tempo
+		}
+	}
 	
+	public void nextQuestion() {
+		//pulou
+		System.out.println("Pulou");
+	}
+
+	@PostConstruct
+	public void init() {
+		question = questionBean.nextQuestion(lastIndex++);
+		questionImage = getImagePath(question);
+		secondsRemaining = question.getMaxTime();
+	}
+
 	private String getImagePath(Question question) {
 		final ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		int id = question.getId();
@@ -57,7 +91,7 @@ public class QuestionMB implements Serializable {
 		} else if (externalContext.getResourceAsStream("/resources/images/question/" + id + ".jpeg") != null) {
 			return "question/" + id + ".jpeg";
 		}
-	
+
 		return null;
 	}
 }

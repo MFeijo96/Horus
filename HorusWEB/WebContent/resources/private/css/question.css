@@ -8,6 +8,26 @@
 	border-color: #240824;
 }
 
+.next_question_button .ui-button-text {
+    padding: 0.4em 1.7em 0.6em 1em !important;
+    font-size: 20px;
+}
+
+.next_question_button .ui-button-icon-left {
+    left: auto !important;
+    right: 0.5em; 
+}
+
+.next_question_button {
+	margin-top: 15px !important;
+	margin-right: 15px !important;
+	background: transparent !important;
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
 body .modal-dialog {
     max-width: 100%;
     width: auto !important;
