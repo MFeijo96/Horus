@@ -1,0 +1,11 @@
+.menu_top_bar {
+	height: 60px;
+	background: #240824;
+}
+
+.menu_top_bar .txt_user {
+	color: white;
+	margin-right: 50px;
+	margin-top: auto;
+	margin-bottom: auto;
+}

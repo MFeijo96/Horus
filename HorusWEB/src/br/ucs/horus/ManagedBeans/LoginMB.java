@@ -7,9 +7,12 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.UserBean;
+import br.ucs.horus.models.User;
 
 @Named
 @SessionScoped
@@ -21,6 +24,9 @@ public class LoginMB implements Serializable {
 	
 	@EJB
 	private UserBean userBean;
+	
+	@Inject
+	private Sessao sessao;
 
 	public LoginMB() {
 
@@ -57,10 +63,12 @@ public class LoginMB implements Serializable {
 			return null;
 		}
 		
-		if (!userBean.canLogin(user,  password)) { 
+		final User currentUser = userBean.login(user,  password);
+		if (currentUser == null) { 
 			FacesContext.getCurrentInstance().addMessage(null, criarMsg("Erro", "Usuário ou senha inválidos", FacesMessage.SEVERITY_ERROR));
 			return null;
 		} else {
+			sessao.setCurrentUser(currentUser);
 			return "/private/question.jsf?faces-redirect=true";
 		}
 	}

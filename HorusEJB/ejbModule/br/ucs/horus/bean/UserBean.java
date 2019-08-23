@@ -14,13 +14,17 @@ public class UserBean {
 	@EJB
 	private UserDAO	userDAO;
 	
-	public boolean canLogin(String username, String password) {
+	public User login(String username, String password) {
 		User user = userDAO.findUser(username);
 		
 		if (user != null && password != null && password.length() > 0) {
-			return user.getPassword().equals(password);
+			if (user.getPassword().equals(password)) {
+				return user;
+			} else {
+				return null;
+			}
 		}
 		
-		return false;
+		return null;
 	}
 }
