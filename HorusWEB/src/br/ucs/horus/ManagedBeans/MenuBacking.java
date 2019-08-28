@@ -20,6 +20,6 @@ public class MenuBacking implements Serializable {
 	
 	public String getUsername() {
 		final User user = sessao.getCurrentUser();
-		return "Olá " + sessao.getCurrentUser() == null || user.getFirstName() == null ? "Desconhecido" : sessao.getCurrentUser().getFirstName();
+		return "Olá " + (user == null || user.getFirstName() == null ? "Desconhecido" : user.getFirstName());
 	}
 }

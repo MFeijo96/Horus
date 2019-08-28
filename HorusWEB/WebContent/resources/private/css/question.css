@@ -2,6 +2,11 @@
 	background-color: #9dbf7a;
 }
 
+#form\:txt_count {
+	margin-right: 20px;
+	margin-top: 10px;
+}
+
 .btn-answer {
 	color: white;
 	background-color: #240824;
@@ -54,6 +59,7 @@ body .modal-dialog {
   -webkit-border-radius: 50px;
   border-radius: 40px;
 }
+
 label.btn {
     padding: 18px 60px;
     white-space: normal;

@@ -1,6 +1,9 @@
 package br.ucs.horus.ManagedBeans;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -8,9 +11,14 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
+
+import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.QuestionBean;
+import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
 
 @Named
@@ -21,11 +29,23 @@ public class QuestionMB implements Serializable {
 	private Question question;
 	private String questionImage, regressiveCounter;
 	private Integer secondsRemaining;
-	private int lastIndex = 0;
+	private int lastIndex = 3;
+	private List<Answer> answers;
 
+	@Inject
+	private Sessao sessao;
+	
 	@EJB
 	private QuestionBean questionBean;
 
+	public String onSelectAnswer(int index) {
+		Answer answer = answers.get(index);
+		
+		//Fazer processamento
+		
+		return "/private/media.jsf?faces-redirect=true";
+	}
+	
 	public Question getQuestion() {
 		return question;
 	}
@@ -58,6 +78,14 @@ public class QuestionMB implements Serializable {
 		this.secondsRemaining = secondsRemaining;
 	}
 
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
+	}
+
 	public void decrementCounter() {
 		if (secondsRemaining > 0) {
 			secondsRemaining--;
@@ -77,6 +105,8 @@ public class QuestionMB implements Serializable {
 	@PostConstruct
 	public void init() {
 		question = questionBean.nextQuestion(lastIndex++);
+		answers = question.getAnswers();
+		Collections.shuffle(answers);
 		questionImage = getImagePath(question);
 		secondsRemaining = question.getMaxTime();
 	}

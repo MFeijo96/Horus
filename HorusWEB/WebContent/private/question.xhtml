@@ -35,30 +35,51 @@
 			</div>
 			<div class="modal-body">
 				<div class="quiz" id="quiz" data-toggle="buttons">
-					<h:outputLabel
+					<h:outputLabel onclick="onSelectAnswer1()"
 						styleClass="element-animation1 btn btn-lg btn-answer btn-block"
-						value="#{questionMB.question.answers.get(0).answer}" />
-					<h:outputLabel
+						value="#{questionMB.answers.get(0).answer}" />
+
+					<h:outputLabel onclick="onSelectAnswer2()"
 						styleClass="element-animation2 btn btn-lg btn-answer btn-block"
-						value="#{questionMB.question.answers.get(1).answer}" />
-					<h:outputLabel
+						value="#{questionMB.answers.get(1).answer}" />
+
+					<h:outputLabel onclick="onSelectAnswer3()"
 						styleClass="element-animation3 btn btn-lg btn-answer btn-block"
-						rendered="#{questionMB.question.answers.size() > 2}"
-						value="#{questionMB.question.answers.get(2).answer}" />
-					<h:outputLabel
+						rendered="#{questionMB.answers.size() > 2}"
+						value="#{questionMB.answers.get(2).answer}" />
+
+					<h:outputLabel onclick="onSelectAnswer4()"
 						styleClass="element-animation4 btn btn-lg btn-answer btn-block"
-						rendered="#{questionMB.question.answers.size() > 3}"
-						value="#{questionMB.question.answers.get(3).answer}" />
-					<h:outputLabel
+						rendered="#{questionMB.answers.size() > 3}"
+						value="#{questionMB.answers.get(3).answer}" />
+
+					<h:outputLabel onclick="onSelectAnswer5()"
 						styleClass="element-animation5 btn btn-lg btn-answer btn-block"
-						rendered="#{questionMB.question.answers.size() > 4}"
-						value="#{questionMB.question.answers.get(4).answer}" />
+						rendered="#{questionMB.answers.size() > 4}"
+						value="#{questionMB.answers.get(4).answer}" />
+
+					<p:remoteCommand name="onSelectAnswer1"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(1).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(1)}" />
+					<p:remoteCommand name="onSelectAnswer2"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(2).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(2)}" />
+					<p:remoteCommand name="onSelectAnswer3"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(3).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(3)}" />
+					<p:remoteCommand name="onSelectAnswer4"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(4).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(4)}" />
+					<p:remoteCommand name="onSelectAnswer5"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(5).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(5)}" />
 				</div>
 			</div>
 		</h:panelGroup>
 		<div class="row justify-content-end">
-			<p:commandButton styleClass="next_question_button" value="Pular" action="#{questionMB.nextQuestion}"
-				update="growl questionContent" icon="fa fa-chevron-right" />
+			<p:commandButton styleClass="next_question_button" value="Pular"
+				action="#{questionMB.nextQuestion}" update="growl questionContent"
+				icon="fa fa-chevron-right" />
 		</div>
 	</div>
 
