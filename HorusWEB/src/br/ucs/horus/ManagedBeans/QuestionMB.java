@@ -1,27 +1,16 @@
 package br.ucs.horus.ManagedBeans;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.primefaces.PrimeFaces;
-
-import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.MediaBean;
 import br.ucs.horus.bean.QuestionBean;
 import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
-import br.ucs.horus.utils.Utils;
 
 @Named
 @ViewScoped //session
@@ -31,7 +20,7 @@ public class QuestionMB implements Serializable {
 	private Question question;
 	private String questionImage, regressiveCounter;
 	private Integer secondsRemaining;
-	private int lastIndex = 3;
+	private int lastIndex = 1;
 	private List<Answer> answers;
 	
 	@EJB
