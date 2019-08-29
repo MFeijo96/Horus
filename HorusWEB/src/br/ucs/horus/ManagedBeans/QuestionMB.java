@@ -17,9 +17,11 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import br.ucs.horus.Utils.Sessao;
+import br.ucs.horus.bean.MediaBean;
 import br.ucs.horus.bean.QuestionBean;
 import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
+import br.ucs.horus.utils.Utils;
 
 @Named
 @ViewScoped //session
@@ -31,13 +33,13 @@ public class QuestionMB implements Serializable {
 	private Integer secondsRemaining;
 	private int lastIndex = 3;
 	private List<Answer> answers;
-
-	@Inject
-	private Sessao sessao;
 	
 	@EJB
 	private QuestionBean questionBean;
 
+	@EJB
+	private MediaBean mediaBean;
+	
 	public String onSelectAnswer(int index) {
 		Answer answer = answers.get(index);
 		
@@ -107,21 +109,10 @@ public class QuestionMB implements Serializable {
 		question = questionBean.nextQuestion(lastIndex++);
 		answers = question.getAnswers();
 		Collections.shuffle(answers);
-		questionImage = getImagePath(question);
+		questionImage = mediaBean.getAuxiliaryMediaPath(question);
 		secondsRemaining = question.getMaxTime();
-	}
-
-	private String getImagePath(Question question) {
-		final ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		int id = question.getId();
-		if (externalContext.getResourceAsStream("/resources/images/question/" + id + ".png") != null) {
-			return "question/" + id + ".png";
-		} else if (externalContext.getResourceAsStream("/resources/images/question/" + id + ".jpg") != null) {
-			return "question/" + id + ".jpg";
-		} else if (externalContext.getResourceAsStream("/resources/images/question/" + id + ".jpeg") != null) {
-			return "question/" + id + ".jpeg";
-		}
-
-		return null;
+		
+		//final ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+				//externalContext.getResourceAsStream("/resources/images/question/" + id + ".png") != null
 	}
 }

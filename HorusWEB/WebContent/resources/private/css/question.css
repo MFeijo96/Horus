@@ -2,6 +2,11 @@
 	background-color: #9dbf7a;
 }
 
+#div_regressive_counter {
+	margin-right:0px;
+	margin-left:0px;
+}
+
 #form\:txt_count {
 	margin-right: 20px;
 	margin-top: 10px;
