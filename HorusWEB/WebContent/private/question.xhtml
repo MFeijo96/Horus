@@ -29,7 +29,7 @@
 					value="#{questionMB.question.question}" />
 
 				<div class="row col-12 justify-content-center">
-					<h:graphicImage class="col-12 col-md-10 col-xl-6" library="images"
+					<h:graphicImage class="col-12 col-md-10 col-xl-6" library="content"
 						name="#{questionMB.questionImage}" />
 				</div>
 			</div>
@@ -59,20 +59,20 @@
 						value="#{questionMB.answers.get(4).answer}" />
 
 					<p:remoteCommand name="onSelectAnswer1"
+						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(0).isCorrect(), questionMB.question)}"
+						action="#{questionMB.onSelectAnswer(0)}" />
+					<p:remoteCommand name="onSelectAnswer2"
 						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(1).isCorrect(), questionMB.question)}"
 						action="#{questionMB.onSelectAnswer(1)}" />
-					<p:remoteCommand name="onSelectAnswer2"
+					<p:remoteCommand name="onSelectAnswer3"
 						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(2).isCorrect(), questionMB.question)}"
 						action="#{questionMB.onSelectAnswer(2)}" />
-					<p:remoteCommand name="onSelectAnswer3"
+					<p:remoteCommand name="onSelectAnswer4"
 						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(3).isCorrect(), questionMB.question)}"
 						action="#{questionMB.onSelectAnswer(3)}" />
-					<p:remoteCommand name="onSelectAnswer4"
+					<p:remoteCommand name="onSelectAnswer5"
 						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(4).isCorrect(), questionMB.question)}"
 						action="#{questionMB.onSelectAnswer(4)}" />
-					<p:remoteCommand name="onSelectAnswer5"
-						actionListener="#{mediaMB.carregarPagina(questionMB.answers.get(5).isCorrect(), questionMB.question)}"
-						action="#{questionMB.onSelectAnswer(5)}" />
 				</div>
 			</div>
 		</h:panelGroup>

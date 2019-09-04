@@ -20,7 +20,7 @@ public class QuestionMB implements Serializable {
 	private Question question;
 	private String questionImage, regressiveCounter;
 	private Integer secondsRemaining;
-	private int lastIndex = 1;
+	private int lastIndex = 0;
 	private List<Answer> answers;
 	
 	@EJB

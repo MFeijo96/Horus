@@ -1,10 +1,13 @@
 package br.ucs.horus.bean;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import br.ucs.horus.dao.MediaDAO;
+import br.ucs.horus.models.Media;
 import br.ucs.horus.models.Question;
 import br.ucs.horus.utils.Utils;
 
@@ -22,5 +25,9 @@ public class MediaBean {
 		}
 		
 		return path;
+	}
+
+	public List<? super Media> getRecommendedMedia(Question question) {
+		return mediaDAO.findRecommendedMedia(question);
 	}
 }

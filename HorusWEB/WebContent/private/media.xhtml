@@ -12,13 +12,33 @@
 
 	<p:growl id="growl" showDetail="true" sticky="true" />
 	<div class="col-12 modal-dialog">
-		<h:panelGroup id="questionContent" layout="block"
-			class="col-12 modal-content">
-			<div class="modal-body">
-				<h:outputText value="#{mediaMB.teste}" />
-			</div>
+		<h:panelGroup layout="block" rendered="#{mediaMB.isCorrect()}"
+			class="alert alert-success">
+			<h:outputText value="Resposta correta!" />
 		</h:panelGroup>
-		
+		<h:panelGroup layout="block" rendered="#{not mediaMB.isCorrect()}"
+			class="alert alert-danger">
+			<h:outputText value="Resposta incorreta!" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" rendered="#{not mediaMB.isCorrect()}"
+			class="alert alert-secondary">
+			<h:outputText
+				value="Segue abaixo um material para auxiliar em seus estudos" />
+		</h:panelGroup>
+
+		<p:carousel value="#{mediaMB.recommendedMedia}"
+			rendered="#{not mediaMB.isCorrect()}" var="media"
+			itemStyle="text-align:center" responsive="true">
+			<p:panelGrid columns="1" layout="grid"
+				styleClass="ui-panelgrid-blank">
+				<f:facet name="header">
+					<h:panelGroup layout="block" class="#{mediaMB.getMediaIcon(media.type)}"/>
+				</f:facet>
+
+				<h:outputLabel styleClass="carousel_item_title" value="#{media.title}" />
+			</p:panelGrid>
+		</p:carousel>
+
 	</div>
 
 </ui:decorate>

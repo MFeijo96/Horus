@@ -10,10 +10,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="AuxiliaryMedia")
-public class AuxiliaryMedia implements Serializable {
-	private static final long serialVersionUID = 533770744396384582L;
-	
+@Table(name="RecommendedMedia")
+public class RecommendedMedia implements Serializable {
+	private static final long serialVersionUID = 1096824208308526808L;
+
 	@Id
 	private int id;
 	
@@ -46,3 +46,4 @@ public class AuxiliaryMedia implements Serializable {
 		this.deletedAt = deletedAt;
 	}
 }
+

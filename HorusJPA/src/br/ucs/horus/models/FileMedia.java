@@ -1,24 +1,14 @@
 package br.ucs.horus.models;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
+@PrimaryKeyJoinColumn(name="id")
 @Table(name="FileMedia")
-public class FileMedia {
-	@Id
-	private int id;
-	
+public class FileMedia extends Media {
 	private String path;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getPath() {
 		return path;
