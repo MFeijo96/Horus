@@ -10,8 +10,18 @@
 		<h:outputStylesheet name="/css/media.css" library="private" />
 	</ui:define>
 
+	<p:lightBox id="lighbox2">
+    <h:outputLink value="#">
+        <h:outputText value="Video Content" />
+    </h:outputLink>
+ 
+    <f:facet name="inline">
+    <p:media value="https://www.youtube.com/watch?v=8m6wrCCRvm8&amp;hl=en&amp;fs=1&amp;" width="600" height="" player="flash"/>
+    </f:facet>
+</p:lightBox>
+
 	<p:growl id="growl" showDetail="true" sticky="true" />
-	<div class="col-12 modal-dialog">
+	<h:panelGroup layout="block" class="col-12 modal-dialog">
 		<h:panelGroup layout="block" rendered="#{mediaMB.isCorrect()}"
 			class="alert alert-success">
 			<h:outputText value="Resposta correta!" />
@@ -32,13 +42,18 @@
 			<p:panelGrid columns="1" layout="grid"
 				styleClass="ui-panelgrid-blank">
 				<f:facet name="header">
-					<h:panelGroup layout="block" class="#{mediaMB.getMediaIcon(media.type)}"/>
+					<h:commandLink actionListener="#{mediaMB.onMediaSelected(media)}">
+						<h:panelGroup layout="block"
+							class="#{mediaMB.getMediaIcon(media.type)} carousel_item_image" />
+					</h:commandLink>
+
 				</f:facet>
 
-				<h:outputLabel styleClass="carousel_item_title" value="#{media.title}" />
+				<h:outputLabel styleClass="carousel_item_title"
+					value="#{media.title}" />
 			</p:panelGrid>
 		</p:carousel>
 
-	</div>
+	</h:panelGroup>
 
 </ui:decorate>

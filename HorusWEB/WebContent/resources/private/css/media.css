@@ -2,4 +2,14 @@ body .modal-dialog {
 	max-width: 100%;
 	width: auto !important;
 	min-width: 400px;
+	pointer-events: auto !important;
+}
+
+.carousel_item_image {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+body .ui-carousel-item .carousel_item_image {
+	color: white;
 }
