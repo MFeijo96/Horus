@@ -13,6 +13,7 @@ import javax.inject.Named;
 import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.UserBean;
 import br.ucs.horus.models.User;
+import br.ucs.horus.utils.Utils;
 
 @Named
 @SessionScoped
@@ -58,24 +59,17 @@ public class LoginMB implements Serializable {
 
 	public String login() {
 		if (user == null || user.length() == 0 || password == null || password.length() == 0) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					criarMsg("Login inválido", "Por favor, preencha os campos corretamente", FacesMessage.SEVERITY_ERROR));
+			Utils.showError("Por favor, preencha os campos corretamente");
 			return null;
 		}
 		
 		final User currentUser = userBean.login(user,  password);
 		if (currentUser == null) { 
-			FacesContext.getCurrentInstance().addMessage(null, criarMsg("Erro", "Usuário ou senha inválidos", FacesMessage.SEVERITY_ERROR));
+			Utils.showError("Usuário ou senha inválidos");
 			return null;
 		} else {
 			sessao.setCurrentUser(currentUser);
 			return "/private/question.jsf?faces-redirect=true";
 		}
-	}
-
-	protected FacesMessage criarMsg(String title, String msg, Severity categoria) {
-		FacesMessage fm = new FacesMessage(title, msg);
-		fm.setSeverity(categoria);
-		return fm;
 	}
 }

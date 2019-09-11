@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<ui:include src="/template/head.xhtml" />
+	</f:facet>
+</h:head>
+<h:body>
+
+	<p:growl id="growl" showDetail="true" sticky="true" />
+	<p:outputPanel class="container-fluid">
+		<p:focus for="form" />
+
+		<h:form id="form">
+			<div class="row justify-content-center">
+				<p:media value="/resources/content/question/reco/Eletricidade.pdf" rendered="false"
+					width="100%" height="300px"> Seu navegador não pôde exibir o conteúdo, 
+					<h:outputLink value="/resources/content/question/reco/Eletricidade.pdf">clique</h:outputLink> para realizar o download.
+				</p:media>
+				<p:media value="http://www.youtube.com/v/RM71Dtm-u5c" width="640" height="360" player="flash" rendered="false"/>
+				<h:graphicImage library="content" name="/question/reco/circuito.jpg"/>
+			</div>
+		</h:form>
+	</p:outputPanel>
+
+	<ui:include src="/template/footer.xhtml" />
+
+</h:body>
+</html>
