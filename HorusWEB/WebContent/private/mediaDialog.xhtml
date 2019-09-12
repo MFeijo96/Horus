@@ -17,13 +17,14 @@
 		<p:focus for="form" />
 
 		<h:form id="form">
+		<h:outputLabel value="#{media['class'].simpleName}" />
 			<div class="row justify-content-center">
-				<p:media value="/resources/content/question/reco/Eletricidade.pdf" rendered="false"
+				<p:media value="#{mediaDialogMB.content}" rendered="#{mediaDialogMB.isFile()}"
 					width="100%" height="300px"> Seu navegador não pôde exibir o conteúdo, 
-					<h:outputLink value="/resources/content/question/reco/Eletricidade.pdf">clique</h:outputLink> para realizar o download.
+					<h:outputLink value="#{mediaDialogMB.content}">clique</h:outputLink> para realizar o download.
 				</p:media>
-				<p:media value="http://www.youtube.com/v/RM71Dtm-u5c" width="640" height="360" player="flash" rendered="false"/>
-				<h:graphicImage library="content" name="/question/reco/circuito.jpg"/>
+				<p:media value="#{mediaDialogMB.content}" width="640" height="360" player="flash" rendered="#{mediaDialogMB.isVideo()}"/>
+				<h:graphicImage library="content" name="#{mediaDialogMB.content}" rendered="#{mediaDialogMB.isImage()}"/>
 			</div>
 		</h:form>
 	</p:outputPanel>

@@ -90,13 +90,13 @@ public class MediaMB implements Serializable {
 			String uuid = UUID.randomUUID().toString();
 			params.put("br.ucs.horus.media", Arrays.asList(uuid));
 
-			sessao.getMapa().put(uuid, "teste");
+			sessao.getMapa().put(uuid, media);
 
 			PrimeFaces.current().dialog().openDynamic("/private/mediaDialog.xhtml", options, params);
 		} else if (media instanceof OnlineMedia) {
 			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		    try {
-				externalContext.redirect("http://stackoverflow.com");
+				externalContext.redirect(((OnlineMedia) media).getLink());
 			} catch (IOException e) {
 				Utils.showError("Link não pôde ser aberto");
 				Utils.printLog(e.getMessage());
