@@ -6,7 +6,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+
+import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.MediaBean;
 import br.ucs.horus.bean.QuestionBean;
 import br.ucs.horus.models.Answer;
@@ -20,7 +23,6 @@ public class QuestionMB implements Serializable {
 	private Question question;
 	private String questionImage, regressiveCounter;
 	private Integer secondsRemaining;
-	private int lastIndex = 0;
 	private List<Answer> answers;
 	
 	@EJB
@@ -28,6 +30,9 @@ public class QuestionMB implements Serializable {
 
 	@EJB
 	private MediaBean mediaBean;
+	
+	@Inject
+	private Sessao sessao;
 	
 	public String onSelectAnswer(int index) {
 		Answer answer = answers.get(index);
@@ -95,7 +100,7 @@ public class QuestionMB implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		question = questionBean.nextQuestion(lastIndex++);
+		question = questionBean.nextQuestion(sessao.getNextQuestionId());
 		answers = question.getAnswers();
 		Collections.shuffle(answers);
 		questionImage = mediaBean.getAuxiliaryMediaPath(question);

@@ -15,6 +15,7 @@ public class Sessao implements Serializable {
 	private static final long serialVersionUID = -7119162199478968302L;
 
 	private User currentUser;
+	private int nextQuestionId = 1;
 	
 	private Map<String, Object> mapa = new HashMap<>();
 
@@ -28,5 +29,9 @@ public class Sessao implements Serializable {
 	
 	public Map<String, Object> getMapa() {
 		return this.mapa;
+	}
+
+	public int getNextQuestionId() {
+		return nextQuestionId++;
 	}
 }

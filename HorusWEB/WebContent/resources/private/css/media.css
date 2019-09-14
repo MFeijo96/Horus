@@ -13,3 +13,9 @@ body .modal-dialog {
 body .ui-carousel-item .carousel_item_image {
 	color: white;
 }
+
+.btn-next-question {
+	background-color: #240824 !important;
+	border-color: #240824 !important;
+	margin-top: 20px !important;
+}

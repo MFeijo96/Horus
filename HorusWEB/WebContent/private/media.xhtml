@@ -20,14 +20,14 @@
 			class="alert alert-danger">
 			<h:outputText value="Resposta incorreta!" />
 		</h:panelGroup>
-		<h:panelGroup layout="block" rendered="#{not mediaMB.isCorrect()}"
+		<h:panelGroup layout="block" rendered="#{mediaMB.hasRecommendedMedia()}"
 			class="alert alert-secondary">
 			<h:outputText
 				value="Segue abaixo um material para auxiliar em seus estudos" />
 		</h:panelGroup>
 
 		<p:carousel value="#{mediaMB.recommendedMedia}"
-			rendered="#{not mediaMB.isCorrect()}" var="media"
+			rendered="#{mediaMB.hasRecommendedMedia()}" var="media"
 			itemStyle="text-align:center" responsive="true">
 			<p:panelGrid columns="1" layout="grid"
 				styleClass="ui-panelgrid-blank">
@@ -43,6 +43,9 @@
 					value="#{media.title}" />
 			</p:panelGrid>
 		</p:carousel>
+		
+		<p:commandButton styleClass="btn btn-primary btn-lg btn-block btn-next-question" value="Próxima Questão"
+				action="#{mediaMB.nextQuestion()}" update="growl"/>
 	</h:panelGroup>
 
 </ui:decorate>

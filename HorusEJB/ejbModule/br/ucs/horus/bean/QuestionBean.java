@@ -14,7 +14,7 @@ public class QuestionBean {
 	private QuestionDAO	questionDAO;
 	
 	public Question nextQuestion(int lastId) {
-		Question question = questionDAO.findQuestion(lastId + 1);
+		Question question = questionDAO.findQuestion(lastId);
 		
 		return question;
 	}

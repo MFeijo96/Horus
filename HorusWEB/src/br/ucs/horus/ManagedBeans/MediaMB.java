@@ -65,6 +65,10 @@ public class MediaMB implements Serializable {
 		this.isCorrect = isCorrect;
 		recommendedMedia = mediaBean.getRecommendedMedia(question);
 	}
+	
+	public boolean hasRecommendedMedia() {
+		return !Utils.isEmpty(recommendedMedia);
+	}
 
 	public String getMediaIcon(int type) {
 		return Type.getIcon(type);
@@ -102,5 +106,9 @@ public class MediaMB implements Serializable {
 				Utils.printLog(e.getMessage());
 			}
 		}
+	}
+	
+	public String nextQuestion() {
+		return "/private/question.jsf?faces-redirect=true";
 	}
 }
