@@ -3,18 +3,16 @@ package br.ucs.horus.ManagedBeans;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.models.FileMedia;
 import br.ucs.horus.models.ImageMedia;
 import br.ucs.horus.models.Media;
-import br.ucs.horus.models.OnlineMedia;
 import br.ucs.horus.models.VideoMedia;
+import br.ucs.horus.utils.Sessao;
 import br.ucs.horus.utils.Utils;
 
 @Named

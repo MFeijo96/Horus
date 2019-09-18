@@ -9,11 +9,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.MediaBean;
 import br.ucs.horus.bean.QuestionBean;
 import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
+import br.ucs.horus.utils.Sessao;
+
+import static br.ucs.horus.models.Question.Reason.*;
 
 @Named
 @ViewScoped //session
@@ -22,7 +24,7 @@ public class QuestionMB implements Serializable {
 
 	private Question question;
 	private String questionImage, regressiveCounter;
-	private Integer secondsRemaining;
+	private int time;
 	private List<Answer> answers;
 	
 	@EJB
@@ -37,11 +39,15 @@ public class QuestionMB implements Serializable {
 	public String onSelectAnswer(int index) {
 		Answer answer = answers.get(index);
 		
-		//Fazer processamento
+		questionBean.adjustScore(question, answer, answer.isCorrect() ? ACERTO : ERRO, time);
 		
 		return "/private/media.jsf?faces-redirect=true";
 	}
 	
+	public Sessao getSessao() {
+		return sessao;
+	}
+
 	public Question getQuestion() {
 		return question;
 	}
@@ -66,14 +72,6 @@ public class QuestionMB implements Serializable {
 		this.regressiveCounter = regressiveCounter;
 	}
 
-	public Integer getSecondsRemaining() {
-		return secondsRemaining;
-	}
-
-	public void setSecondsRemaining(Integer secondsRemaining) {
-		this.secondsRemaining = secondsRemaining;
-	}
-
 	public List<Answer> getAnswers() {
 		return answers;
 	}
@@ -82,20 +80,30 @@ public class QuestionMB implements Serializable {
 		this.answers = answers;
 	}
 
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+
 	public void decrementCounter() {
-		if (secondsRemaining > 0) {
-			secondsRemaining--;
-			int minutes = secondsRemaining / 60;
-			int seconds = secondsRemaining % 60;
-			this.regressiveCounter = String.format("%02d:%02d", minutes, seconds);	
-		} else {
-			// acabou o tempo
+		time++;
+		if (question.getMaxTime() != null && question.getMaxTime() > 0) {
+			int secondsRemaining = question.getMaxTime() - time;
+			if (secondsRemaining > 0) {
+				int minutes = secondsRemaining / 60;
+				int seconds = secondsRemaining % 60;
+				this.regressiveCounter = String.format("%02d:%02d", minutes, seconds);
+			} else if (secondsRemaining == 0) {		
+				questionBean.adjustScore(question, null, TEMPO, time);
+			}
 		}
 	}
 	
 	public void nextQuestion() {
-		//pulou
-		System.out.println("Pulou");
+		questionBean.adjustScore(question, null, PULO, time);
 	}
 
 	@PostConstruct
@@ -104,7 +112,7 @@ public class QuestionMB implements Serializable {
 		answers = question.getAnswers();
 		Collections.shuffle(answers);
 		questionImage = mediaBean.getAuxiliaryMediaPath(question);
-		secondsRemaining = question.getMaxTime();
+		time = 0;
 		
 		//final ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 				//externalContext.getResourceAsStream("/resources/images/question/" + id + ".png") != null

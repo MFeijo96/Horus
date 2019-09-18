@@ -4,15 +4,13 @@ import java.io.Serializable;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.bean.UserBean;
 import br.ucs.horus.models.User;
+import br.ucs.horus.utils.Sessao;
 import br.ucs.horus.utils.Utils;
 
 @Named
@@ -70,6 +68,25 @@ public class LoginMB implements Serializable {
 		} else {
 			sessao.setCurrentUser(currentUser);
 			return "/private/question.jsf?faces-redirect=true";
+		}
+	}
+	
+	public void prerender() {
+		try {
+			String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+			if (sessao.getCurrentUser() == null && viewId.contains("/private/")) {
+				redirect("/public/login.jsf");
+			}
+		} catch (Exception e) {
+			Utils.showError(e.getMessage());
+		}
+	}
+	
+	public void redirect(String page) throws Exception {
+		if (!Utils.isEmpty(page)) {
+			String uri = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+			page = page.replaceAll("\\?faces-redirect=true", "");
+			FacesContext.getCurrentInstance().getExternalContext().redirect(uri + page);
 		}
 	}
 }

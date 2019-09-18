@@ -12,16 +12,20 @@
 	</ui:define>
 
 	<p:growl id="growl" showDetail="true" sticky="true" />
+	<h:panelGroup layout="block" class="row justify-content-end">
+		<h:outputText class="pontuacao"
+			value="Pontuação: #{questionMB.sessao.currentUser.score}" />
+	</h:panelGroup>
 	<div class="col-12 modal-dialog">
 		<h:panelGroup id="questionContent" layout="block"
 			class="col-12 modal-content">
 			<div class="row justify-content-end">
 				<h:panelGroup layout="block"
-					rendered="${questionMB.secondsRemaining > -1}">
+					visible="${questionMB.question.maxTime gt -1}">
 					<h:outputText id="txt_count"
 						value="#{questionMB.regressiveCounter}" />
 					<p:poll interval="1" listener="#{questionMB.decrementCounter}"
-						update="txt_count" stop="{questionMB.secondsRemaining == 0}" />
+						update="txt_count"/>
 				</h:panelGroup>
 			</div>
 			<div class="col-12 modal-header flex-column">

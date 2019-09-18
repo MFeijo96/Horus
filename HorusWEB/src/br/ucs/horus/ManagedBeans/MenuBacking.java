@@ -6,8 +6,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.ucs.horus.Utils.Sessao;
 import br.ucs.horus.models.User;
+import br.ucs.horus.utils.Sessao;
 
 @Named
 @SessionScoped

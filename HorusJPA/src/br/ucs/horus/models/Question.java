@@ -1,11 +1,8 @@
 package br.ucs.horus.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,7 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 
 @Entity
 @Table(name="Questions")
@@ -27,7 +23,7 @@ public class Question {
 	private String question;
 	
 	private Integer contentMedia_id;
-	private int maxTime;
+	private Integer maxTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deletedAt;
@@ -60,11 +56,11 @@ public class Question {
 		this.contentMedia_id = contentMedia_id;
 	}
 
-	public int getMaxTime() {
+	public Integer getMaxTime() {
 		return maxTime;
 	}
 
-	public void setMaxTime(int maxTime) {
+	public void setMaxTime(Integer maxTime) {
 		this.maxTime = maxTime;
 	}
 
@@ -82,5 +78,26 @@ public class Question {
 
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
+	}
+	
+	public enum Reason {
+	    ACERTO(1),ERRO(2),TEMPO(3),PULO(4),CHUTE(5);
+	 
+	    public int value;
+	    Reason(int valor) {
+	        value = valor;
+	    }
+	    
+	    public static float getFator(Reason reason) {
+	    	if (reason == ERRO) {
+	    		return -1;
+	    	} else if (reason == TEMPO) {
+	    		return -0.25f;
+	    	} else if (reason == PULO || reason == CHUTE) {
+	    		return -0.5f;
+	    	} else {
+	    		throw new RuntimeException("Nenhum fator estabelecido para este motivo");
+	    	}
+	    }
 	}
 }

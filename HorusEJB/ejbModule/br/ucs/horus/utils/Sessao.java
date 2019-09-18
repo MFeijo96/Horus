@@ -1,4 +1,4 @@
-package br.ucs.horus.Utils;
+package br.ucs.horus.utils;
 
 import java.io.Serializable;
 import java.util.HashMap;
