@@ -7,9 +7,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Historic;
 import br.ucs.horus.models.Question;
+import br.ucs.horus.models.QuestionSkill;
+import br.ucs.horus.models.Skill;
 import br.ucs.horus.models.User;
 import br.ucs.horus.utils.Utils;
 
@@ -42,5 +43,16 @@ public class QuestionDAO {
 	
 	public void saveHistoric(Historic historic) {
 		em.persist(historic);
+	}
+
+	public List<QuestionSkill> getPositiveSkills(Question question) {
+		@SuppressWarnings("unchecked")
+		final List<QuestionSkill> skills = em.createQuery("SELECT qs FROM QuestionSkill qs WHERE qs.deletedAt IS NULL"
+				+ " AND qs.question_id = :question_id "
+				+ " AND qs.level > 0")
+		.setParameter("question_id", question.getId())
+		.getResultList();
+		
+		return Utils.isEmpty(skills) ? null : skills;
 	}
 }

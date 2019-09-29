@@ -1,5 +1,6 @@
 package br.ucs.horus.utils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -26,6 +27,10 @@ public class Utils {
 		FacesMessage fm = new FacesMessage(title, msg);
 		fm.setSeverity(categoria);
 		return fm;
+	}
+	
+	public static float round(float d, int decimalPlace) {
+	    return BigDecimal.valueOf(d).setScale(decimalPlace, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 
 	public static void printLog(String message) {
