@@ -46,7 +46,7 @@
 						<h:panelGroup>	Lembrar</h:panelGroup>
 						<h:panelGroup layout="block"
 							class="d-flex justify-content-center mt-3 login_container">
-							<p:commandButton action="#{loginMB.login()}" value="Entrar"
+							<p:commandButton actionListener="#{loginMB.login()}" action="#{questionMB.reload()}" value="Entrar"
 								styleClass="btn btn-block login_btn" update="growl" />
 						</h:panelGroup>
 					</h:form>

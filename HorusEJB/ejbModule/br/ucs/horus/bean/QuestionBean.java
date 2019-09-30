@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import br.ucs.horus.dao.QuestionDAO;
+import br.ucs.horus.dao.SkillDAO;
 import br.ucs.horus.dao.UserDAO;
 import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Historic;
@@ -20,8 +21,12 @@ import br.ucs.horus.utils.Utils;
 
 import static br.ucs.horus.models.Question.Reason.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -31,6 +36,9 @@ public class QuestionBean {
 
 	@EJB
 	private UserDAO userDAO;
+	
+	@EJB
+	private SkillDAO skillDAO;
 
 	@Inject
 	private Sessao sessao;
@@ -42,6 +50,10 @@ public class QuestionBean {
 	}
 
 	public void update(Question question, Answer answer, Reason reason, int time) {
+		Utils.printLogInfo("Pergunta respondida - Usuário [" + sessao.getCurrentUser().getId() + "]"
+				+ " - Pergunta [" + question.getId() + "]"
+				+ " - Resposta [" + answer.getId() + "]"
+				+ " - Motivo [" + reason.value + "]");
 		adjustScore(question, answer, reason, time);
 		adjustRecomendation(question, answer, reason, time);
 	}
@@ -79,9 +91,11 @@ public class QuestionBean {
 		newHistoric.setTime(time);
 		newHistoric.setPartialScore(partialScore);
 
-		Utils.printLog("Usuario:" + currentUser.getId() + " Questão:" + question.getId() + " PontuaçãoAnt:"
-				+ currentUser.getScore() + " PontuaçãoParcial:" + partialScore + " Tempo:" + time + " PontuaçãoFinal: "
-				+ userScore);
+		Utils.printLogInfo("Pontuação gerada - Usuário [" + currentUser.getId() + "]"
+				+ " - PontuaçãoAnt [" + currentUser.getScore() + "]"
+				+ " - PontuaçãoParcial [" + partialScore + "]"
+				+ " - Tempo [" + time + "]"
+				+ " - PontuaçãoFinal [" + userScore + "]");
 
 		currentUser.setScore(userScore);
 		userDAO.updateUser(currentUser);
@@ -133,7 +147,7 @@ public class QuestionBean {
 	}
 
 	private void correctFlowRequirement(Question question, User user, int time) {
-		final List<QuestionSkill> questionSkills = questionDAO.getPositiveSkills(question);
+		final List<QuestionSkill> questionSkills = skillDAO.getPositiveSkills(question);
 
 		if (!Utils.isEmpty(questionSkills)) {
 			final List<UserSkill> userSkills = userDAO.getUserSkills(user);
@@ -167,7 +181,7 @@ public class QuestionBean {
 	}
 
 	private void wrongFlowRequirement(Question question, User user, Reason reason) {
-		final List<QuestionSkill> questionSkills = questionDAO.getPositiveSkills(question);
+		final List<QuestionSkill> questionSkills = skillDAO.getPositiveSkills(question);
 
 		if (!Utils.isEmpty(questionSkills)) {
 			final List<UserSkill> userSkills = userDAO.getUserSkills(user);
@@ -195,5 +209,87 @@ public class QuestionBean {
 
 	private float getQuestionValue() {
 		return 5f / questionDAO.getTotalAvailableQuestions();
+	}
+	
+	public Question getNextQuestion() {
+		final User user = sessao.getCurrentUser();
+		final List<UserSkill> userSkills = userDAO.getUserSkills(user);
+		final List<Skill> otherSkills = skillDAO.getSkillsExcept(getIds(userSkills));
+		final LinkedHashMap<Integer, Float> userCapabilities = new LinkedHashMap<>();
+		
+		if (!Utils.isEmpty(otherSkills)) {
+			for (Skill skill : otherSkills) {
+				userCapabilities.put(skill.getId(), 0f);
+			}
+		}
+		
+		String capabilitiesDebug = "";
+		if (!Utils.isEmpty(userSkills)) {
+			for (UserSkill skill : userSkills) {
+				userCapabilities.put(skill.getSkill_id(), skill.getLevel());
+				capabilitiesDebug += skill.getSkill_id() + "=" + skill.getLevel();
+			}
+		}
+		
+		Utils.printLogDebug("Buscando nova pergunta - Usuário [" + user.getId() + "]"
+				+ " - Capacidades Usuário [" + capabilitiesDebug + "]"
+						+ " - Capacidades completas: [" + userCapabilities + "]");
+		
+		for (Map.Entry<Integer, Float> capacity : userCapabilities.entrySet()) {
+		    final List<Question> possibleQuestions = new ArrayList<Question>();
+		    float userCapacity = capacity.getValue(); 
+		    do {
+		    	final List<Question> questions = questionDAO.getQuestionsForMinorRequirement(capacity.getKey(), userCapacity);
+		    	userCapacity += 1;
+		    	for (Question question: questions) {
+		    		boolean canContinue = true;
+		    		
+		    		List<QuestionSkill> questionSkills = skillDAO.getSkills(question);
+		    		for (QuestionSkill questionSkill: questionSkills) {
+		    			if (questionSkill.getLevel() <= (userCapabilities.get(questionSkill.getQuestion_id()) + 1)) { //&& questionSkill.getLevel() > (userCapabilities.get(questionSkill.getQuestion_id()) - 1)
+		    				canContinue = true;
+		    			} else {
+		    				canContinue = false;
+		    				break;
+		    			}
+		    		}
+		    		
+		    		if (canContinue) {
+		    			possibleQuestions.add(question);
+		    			if (possibleQuestions.size() > 2) break;
+		    		}
+		    	}
+		    //} while (possibleQuestions.size() < 10 && userCapacity < 6);
+		    } while (possibleQuestions.size() < 3 && userCapacity < 6);
+		    
+		    Utils.printLogDebug("Buscando nova pergunta - Usuário [" + user.getId() + "]"
+					+ " - Possíveis questões [" + possibleQuestions + "]");
+		    
+		    if (possibleQuestions.size() > 0) {
+		    	final List<Question> questionNotAnswered = questionDAO.getQuestionsNotAnswered(possibleQuestions, user);
+		    	if (!Utils.isEmpty(questionNotAnswered)) {
+			    	for (Question question: questionNotAnswered) {
+			    		possibleQuestions.add(question);
+			    	}
+		    	}
+		    	
+		    	Utils.printLogDebug("Buscando nova pergunta - Usuário [" + user.getId() + "]"
+						+ " - Questões finais [" + possibleQuestions + "]");
+		    	return possibleQuestions.get(Utils.getNextRandom(possibleQuestions.size()));
+		    }
+		}
+		
+		return null;
+	}
+	
+	private List<Integer> getIds(List<UserSkill> userSkills) {
+		final List<Integer> result = new ArrayList<>();
+		if (!Utils.isEmpty(userSkills)) {
+			for (UserSkill userSkill: userSkills) {
+				result.add(userSkill.getSkill_id());
+			}
+		}
+		
+		return result;
 	}
 }

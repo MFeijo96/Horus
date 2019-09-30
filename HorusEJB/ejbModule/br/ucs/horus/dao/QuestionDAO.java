@@ -1,5 +1,6 @@
 package br.ucs.horus.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -9,8 +10,6 @@ import javax.persistence.PersistenceContext;
 
 import br.ucs.horus.models.Historic;
 import br.ucs.horus.models.Question;
-import br.ucs.horus.models.QuestionSkill;
-import br.ucs.horus.models.Skill;
 import br.ucs.horus.models.User;
 import br.ucs.horus.utils.Utils;
 
@@ -45,14 +44,44 @@ public class QuestionDAO {
 		em.persist(historic);
 	}
 
-	public List<QuestionSkill> getPositiveSkills(Question question) {
+	public List<Question> getQuestionsForMinorRequirement(int skillId, float userCapacity) {
 		@SuppressWarnings("unchecked")
-		final List<QuestionSkill> skills = em.createQuery("SELECT qs FROM QuestionSkill qs WHERE qs.deletedAt IS NULL"
-				+ " AND qs.question_id = :question_id "
-				+ " AND qs.level > 0")
-		.setParameter("question_id", question.getId())
-		.getResultList();
+		List<Question> questions = em.createQuery("SELECT q FROM Question q WHERE q.deletedAt IS NULL"
+				+ " AND q.id IN (SELECT qs.question_id FROM QuestionSkill qs WHERE qs.deletedAt IS NULL"
+				+ " AND qs.skill_id = :skill_id"
+				+ " AND qs.level >= :minor"
+				+ " AND qs.level <= :max"
+				+ " ORDER BY qs.level ASC)")
+				.setParameter("skill_id", skillId)
+				.setParameter("minor", userCapacity)
+				.setParameter("max", userCapacity + 1)
+				.getResultList();
 		
-		return Utils.isEmpty(skills) ? null : skills;
+		return questions;
+	}
+
+	public List<Question> getQuestionsNotAnswered(List<Question> questions, User user) {
+		@SuppressWarnings("unchecked")
+		List<Question> result = em.createQuery("SELECT q FROM Question q WHERE q.deletedAt IS NULL"
+				+ " AND q.id NOT IN (SELECT h.question_id FROM Historic h WHERE h.deletedAt IS NULL"
+				+ " AND h.user_id = :user_id"
+				+ " AND h.question_id IN (:ids))"
+				+ " AND q.id IN (:ids)")
+				.setParameter("user_id", user.getId())
+				.setParameter("ids", getIds(questions))
+				.getResultList();
+		
+		return Utils.isEmpty(result) ? null : result;
+	}
+	
+	private List<Integer> getIds(List<Question> questions) {
+		final List<Integer> result = new ArrayList<>();
+		if (!Utils.isEmpty(questions)) {
+			for (Question question: questions) {
+				result.add(question.getId());
+			}
+		}
+		
+		return result;
 	}
 }

@@ -20,10 +20,10 @@ public class LoginMB implements Serializable {
 	private static final long serialVersionUID = 2645917878819223639L;
 	private String user, password;
 	private boolean rememberMe;
-	
+
 	@EJB
 	private UserBean userBean;
-	
+
 	@Inject
 	private Sessao sessao;
 
@@ -55,38 +55,36 @@ public class LoginMB implements Serializable {
 		this.rememberMe = rememberMe;
 	}
 
-	public String login() {
+	public void login() {
 		if (user == null || user.length() == 0 || password == null || password.length() == 0) {
 			Utils.showError("Por favor, preencha os campos corretamente");
-			return null;
+			// return null;
 		}
-		
-		final User currentUser = userBean.login(user,  password);
-		if (currentUser == null) { 
+
+		final User currentUser = userBean.login(user, password);
+		if (currentUser == null) {
 			Utils.showError("Usuário ou senha inválidos");
-			return null;
+			// return null;
 		} else {
-			sessao.setCurrentUser(currentUser);
-			return "/private/question.jsf?faces-redirect=true";
+			try {
+				sessao.setCurrentUser(currentUser);
+				Utils.printLogInfo("Login realizado - Usuário [" + currentUser.getId() + "]");
+				// return "/private/question.jsf?faces-redirect=true";
+				Utils.redirect("/private/question.jsf");
+			} catch (Exception e) {
+				Utils.showError(e.getMessage());
+			}
 		}
 	}
-	
+
 	public void prerender() {
 		try {
 			String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 			if (sessao.getCurrentUser() == null && viewId.contains("/private/")) {
-				redirect("/public/login.jsf");
+				Utils.redirect("/public/login.jsf");
 			}
 		} catch (Exception e) {
 			Utils.showError(e.getMessage());
-		}
-	}
-	
-	public void redirect(String page) throws Exception {
-		if (!Utils.isEmpty(page)) {
-			String uri = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-			page = page.replaceAll("\\?faces-redirect=true", "");
-			FacesContext.getCurrentInstance().getExternalContext().redirect(uri + page);
 		}
 	}
 }

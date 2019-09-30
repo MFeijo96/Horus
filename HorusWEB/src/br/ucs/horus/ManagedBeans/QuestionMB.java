@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,11 +14,12 @@ import br.ucs.horus.bean.QuestionBean;
 import br.ucs.horus.models.Answer;
 import br.ucs.horus.models.Question;
 import br.ucs.horus.utils.Sessao;
+import br.ucs.horus.utils.Utils;
 
 import static br.ucs.horus.models.Question.Reason.*;
 
 @Named
-@ViewScoped // session
+@SessionScoped
 public class QuestionMB implements Serializable {
 	private static final long serialVersionUID = -1907939408935134046L;
 
@@ -93,7 +94,7 @@ public class QuestionMB implements Serializable {
 	}
 
 	public void decrementCounter() {
-		if (!alreadyCall) {
+		if (!alreadyCall && question != null) {
 			time++;
 			if (question.getMaxTime() != null && question.getMaxTime() > 0) {
 				int secondsRemaining = question.getMaxTime() - time;
@@ -116,18 +117,33 @@ public class QuestionMB implements Serializable {
 		}
 	}
 
-	@PostConstruct
-	public void init() {
-		question = questionBean.nextQuestion(sessao.getNextQuestionId());
-		answers = question.getAnswers();
-		Collections.shuffle(answers);
-		questionImage = mediaBean.getAuxiliaryMediaPath(question);
-		time = 0;
-		alreadyCall = false;
+	public void reload() {
+		if (sessao.getCurrentUser() != null) {
+			question = questionBean.getNextQuestion();
+			Utils.printLogInfo("Pergunta carregada - Usuário [" + sessao.getCurrentUser().getId() + "]"
+					+ " - Pergunta [" + question.getId() + "]");
 
-		// final ExternalContext externalContext =
-		// FacesContext.getCurrentInstance().getExternalContext();
-		// externalContext.getResourceAsStream("/resources/images/question/" + id +
-		// ".png") != null
+			answers = question.getAnswers();
+			Collections.shuffle(answers);
+			questionImage = mediaBean.getAuxiliaryMediaPath(question);
+			time = 0;
+			alreadyCall = false;
+		}
 	}
+
+//	@PostConstruct
+//	public void init() {
+//		reload();
+//		question = questionBean.nextQuestion(sessao.getNextQuestionId());
+//		answers = question.getAnswers();
+//		Collections.shuffle(answers);
+//		questionImage = mediaBean.getAuxiliaryMediaPath(question);
+//		time = 0;
+//		alreadyCall = false;
+
+	// final ExternalContext externalContext =
+	// FacesContext.getCurrentInstance().getExternalContext();
+	// externalContext.getResourceAsStream("/resources/images/question/" + id +
+	// ".png") != null
+//	}
 }

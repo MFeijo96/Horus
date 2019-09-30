@@ -37,7 +37,8 @@ public class UserDAO {
 	public List<UserSkill> getUserSkills(User user) {
 		@SuppressWarnings("unchecked")
 		final List<UserSkill> skills = em.createQuery("SELECT us FROM UserSkill us WHERE us.deletedAt IS NULL"
-				+ " AND us.user_id = :user_id")
+				+ " AND us.user_id = :user_id"
+				+ " ORDER BY us.level ASC")
 		.setParameter("user_id", user.getId())
 		.getResultList();
 		

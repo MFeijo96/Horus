@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.ucs.horus.models.pk.UserSkillPK;
-
 @Entity
 @Table(name="Skills")
 public class Skill {

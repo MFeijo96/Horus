@@ -96,12 +96,16 @@ public class MediaMB implements Serializable {
 				externalContext.redirect(((OnlineMedia) media).getLink());
 			} catch (IOException e) {
 				Utils.showError("Link não pôde ser aberto");
-				Utils.printLog(e.getMessage());
+				Utils.printLogInfo(e.getMessage());
 			}
 		}
 	}
 	
-	public String nextQuestion() {
-		return "/private/question.jsf?faces-redirect=true";
+	public void nextQuestion() {
+		try {
+			Utils.redirect("/private/question.jsf");
+		} catch (Exception e) {
+			Utils.showError(e.getMessage());
+		}
 	}
 }
