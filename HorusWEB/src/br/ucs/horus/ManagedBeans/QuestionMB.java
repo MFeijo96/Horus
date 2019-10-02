@@ -105,6 +105,11 @@ public class QuestionMB implements Serializable {
 				} else if (secondsRemaining == 0) {
 					alreadyCall = true;
 					questionBean.update(question, null, TEMPO, time);
+					try {
+						Utils.redirect("/private/media.jsf");
+					} catch (Exception e) {
+						Utils.showError(e.getMessage());
+					}
 				}
 			}
 		}
@@ -114,6 +119,11 @@ public class QuestionMB implements Serializable {
 		if (!alreadyCall) {
 			alreadyCall = true;
 			questionBean.update(question, null, PULO, time);
+			try {
+				Utils.redirect("/private/media.jsf");
+			} catch (Exception e) {
+				Utils.showError(e.getMessage());
+			}
 		}
 	}
 

@@ -25,7 +25,7 @@
 					<h:outputText id="txt_count"
 						value="#{questionMB.regressiveCounter}" />
 					<p:poll interval="1" listener="#{questionMB.decrementCounter}"
-						update="txt_count"/>
+						update="txt_count" />
 				</h:panelGroup>
 			</div>
 			<div class="col-12 modal-header flex-column">
@@ -82,7 +82,7 @@
 		</h:panelGroup>
 		<div class="row justify-content-end">
 			<p:commandButton styleClass="next_question_button" value="Pular"
-				action="#{questionMB.nextQuestion}" update="growl questionContent"
+				action="#{questionMB.nextQuestion()}" update="growl questionContent"
 				icon="fa fa-chevron-right" />
 		</div>
 	</div>

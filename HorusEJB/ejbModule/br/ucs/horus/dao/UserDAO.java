@@ -22,7 +22,7 @@ public class UserDAO {
 		List<User> listPersons = em.createQuery("SELECT p FROM User p WHERE p.email = :email AND p.deletedAt IS NULL")
 		.setParameter("email", email)
 		.getResultList();
-		return listPersons.get(0);
+		return Utils.isEmpty(listPersons) ? null : listPersons.get(0);
 	}
 	
 	public void updateSkill(UserSkill userSkill, boolean alreadyExists) {

@@ -82,6 +82,8 @@ public class LoginMB implements Serializable {
 			String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 			if (sessao.getCurrentUser() == null && viewId.contains("/private/")) {
 				Utils.redirect("/public/login.jsf");
+			} else if (sessao.getCurrentUser() != null && !viewId.contains("/private/")) {
+				Utils.redirect("/private/question.jsf");
 			}
 		} catch (Exception e) {
 			Utils.showError(e.getMessage());

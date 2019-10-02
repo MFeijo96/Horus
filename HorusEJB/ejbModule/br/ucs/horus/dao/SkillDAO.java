@@ -7,6 +7,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import br.ucs.horus.models.Question;
 import br.ucs.horus.models.QuestionSkill;
@@ -30,12 +31,15 @@ public class SkillDAO {
 		return Utils.isEmpty(skills) ? null : skills;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Skill> getSkillsExcept(List<Integer> skillIds) {
-		@SuppressWarnings("unchecked")
-		final List<Skill> skills = em.createQuery("SELECT s FROM Skill s WHERE s.deletedAt IS NULL"
-				+ " AND s.id NOT IN (:ids)")
-		.setParameter("ids", skillIds)
-		.getResultList();
+		String query = "SELECT s FROM Skill s WHERE s.deletedAt IS NULL";
+		boolean hasSkills = !Utils.isEmpty(skillIds);
+		if (hasSkills) query += " AND s.id NOT IN (:ids)";
+		
+		Query searchQuery = em.createQuery(query);
+		if (hasSkills) searchQuery.setParameter("ids", skillIds);
+		final List<Skill> skills = searchQuery.getResultList();
 		
 		return skills == null ? new ArrayList<>(): skills;
 	}

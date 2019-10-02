@@ -52,7 +52,7 @@ public class QuestionBean {
 	public void update(Question question, Answer answer, Reason reason, int time) {
 		Utils.printLogInfo("Pergunta respondida - Usuário [" + sessao.getCurrentUser().getId() + "]"
 				+ " - Pergunta [" + question.getId() + "]"
-				+ " - Resposta [" + answer.getId() + "]"
+				+ " - Resposta [" + (answer == null ? "null" : answer.getId()) + "]"
 				+ " - Motivo [" + reason.value + "]");
 		adjustScore(question, answer, reason, time);
 		adjustRecomendation(question, answer, reason, time);
@@ -227,7 +227,7 @@ public class QuestionBean {
 		if (!Utils.isEmpty(userSkills)) {
 			for (UserSkill skill : userSkills) {
 				userCapabilities.put(skill.getSkill_id(), skill.getLevel());
-				capabilitiesDebug += skill.getSkill_id() + "=" + skill.getLevel();
+				capabilitiesDebug += skill.getSkill_id() + "=" + skill.getLevel() + ";";
 			}
 		}
 		
@@ -246,7 +246,7 @@ public class QuestionBean {
 		    		
 		    		List<QuestionSkill> questionSkills = skillDAO.getSkills(question);
 		    		for (QuestionSkill questionSkill: questionSkills) {
-		    			if (questionSkill.getLevel() <= (userCapabilities.get(questionSkill.getQuestion_id()) + 1)) { //&& questionSkill.getLevel() > (userCapabilities.get(questionSkill.getQuestion_id()) - 1)
+		    			if (questionSkill.getLevel() <= (userCapabilities.get(questionSkill.getSkill_id()) + 1.5f)) { //&& questionSkill.getLevel() > (userCapabilities.get(questionSkill.getQuestion_id()) - 1)
 		    				canContinue = true;
 		    			} else {
 		    				canContinue = false;
@@ -264,7 +264,7 @@ public class QuestionBean {
 		    
 		    Utils.printLogDebug("Buscando nova pergunta - Usuário [" + user.getId() + "]"
 					+ " - Possíveis questões [" + possibleQuestions + "]");
-		    
+		    	
 		    if (possibleQuestions.size() > 0) {
 		    	final List<Question> questionNotAnswered = questionDAO.getQuestionsNotAnswered(possibleQuestions, user);
 		    	if (!Utils.isEmpty(questionNotAnswered)) {
@@ -274,7 +274,8 @@ public class QuestionBean {
 		    	}
 		    	
 		    	Utils.printLogDebug("Buscando nova pergunta - Usuário [" + user.getId() + "]"
-						+ " - Questões finais [" + possibleQuestions + "]");
+		    			+ " - Questões finais [" + possibleQuestions + "]"
+		    			+ " - Skill [" + capacity.getKey() + "]");
 		    	return possibleQuestions.get(Utils.getNextRandom(possibleQuestions.size()));
 		    }
 		}
