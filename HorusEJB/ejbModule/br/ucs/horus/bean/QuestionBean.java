@@ -162,14 +162,19 @@ public class QuestionBean {
 								float FT = getFT(question, time, IR, false);
 								userSkill.setLevel(Utils.round(userSkill.getLevel() + FT, 2));
 								userDAO.updateSkill(userSkill, true);
-								found = true;
+							} else {
+								Utils.printLogDebug("Encontrou Skil porém de menor valor. Question[" + questionSkill.getLevel() + "]"
+										+ " User[" + userSkill.getLevel() + "]");
 							}
+							found = true;
 							break;
 						}
 					}
 				}
 
 				if (!found) {
+					Utils.printLogInfo("Nova Skill para o Usuário[" + user.getId() + "]"
+							+ " SkillId[" + questionSkill.getSkill_id() + "]");
 					UserSkill userSkill = new UserSkill();
 					userSkill.setSkill_id(questionSkill.getSkill_id());
 					userSkill.setUser_id(user.getId());

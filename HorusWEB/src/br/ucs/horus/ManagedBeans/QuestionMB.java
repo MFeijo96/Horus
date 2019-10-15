@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.el.ELContext;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -107,6 +109,7 @@ public class QuestionMB implements Serializable {
 					questionBean.update(question, null, TEMPO, time);
 					try {
 						Utils.redirect("/private/media.jsf");
+						updateMediaView();
 					} catch (Exception e) {
 						Utils.showError(e.getMessage());
 					}
@@ -121,10 +124,18 @@ public class QuestionMB implements Serializable {
 			questionBean.update(question, null, PULO, time);
 			try {
 				Utils.redirect("/private/media.jsf");
+				updateMediaView();
 			} catch (Exception e) {
 				Utils.showError(e.getMessage());
 			}
 		}
+	}
+	
+	private void updateMediaView() {
+		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+		MediaMB mediaMB = (MediaMB) FacesContext.getCurrentInstance().getApplication()
+		    .getELResolver().getValue(elContext, null, "mediaMB");
+		mediaMB.carregarPagina(false, question);
 	}
 
 	public void reload() {

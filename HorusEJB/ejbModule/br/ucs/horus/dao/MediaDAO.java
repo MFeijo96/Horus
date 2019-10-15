@@ -26,8 +26,8 @@ public class MediaDAO {
 	@SuppressWarnings("unchecked")
 	public String findAuxiliaryMediaName(Question question) {
 		List<ImageMedia> images = em.createQuery("SELECT p FROM ImageMedia p WHERE"
-				+ " EXISTS (select m.id FROM Media m WHERE m.deletedAt IS NULL and m.type = :type AND "
-				+ " EXISTS (select a.id FROM AuxiliaryMedia a where a.deletedAt IS NULL AND a.question_id = :question_id))")
+				+ " p.id = (select m.id FROM Media m WHERE m.deletedAt IS NULL and m.type = :type AND "
+				+ " m.id = (select a.id FROM AuxiliaryMedia a where a.deletedAt IS NULL AND a.question_id = :question_id))")
 				.setMaxResults(1)
 				.setParameter("question_id", question.getId())
 				.setParameter("type", Type.IMAGE.value)
