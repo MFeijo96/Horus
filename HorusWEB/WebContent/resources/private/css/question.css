@@ -16,6 +16,7 @@
 	color: white;
 	background-color: #240824;
 	border-color: #240824;
+	font-size:16px !important;
 }
 
 .next_question_button .ui-button-text {
@@ -85,6 +86,10 @@ label.btn:hover {
 label.btn-block {
     text-align: left;
     position: relative
+}
+
+.label {
+	font-size: 16px !important;
 }
 
 label .btn-label {
