@@ -54,7 +54,7 @@ public class QuestionDAO {
 				+ " ORDER BY qs.level ASC)")
 				.setParameter("skill_id", skillId)
 				.setParameter("minor", userCapacity)
-				.setParameter("max", userCapacity + 1)
+				.setParameter("max", userCapacity + 2) //1
 				.getResultList();
 		
 		return questions;

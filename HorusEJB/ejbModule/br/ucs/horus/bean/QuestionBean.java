@@ -251,7 +251,7 @@ public class QuestionBean {
 		    		
 		    		List<QuestionSkill> questionSkills = skillDAO.getSkills(question);
 		    		for (QuestionSkill questionSkill: questionSkills) {
-		    			if (questionSkill.getLevel() <= (userCapabilities.get(questionSkill.getSkill_id()) + 1.5f)) { //&& questionSkill.getLevel() > (userCapabilities.get(questionSkill.getQuestion_id()) - 1)
+		    			if (questionSkill.getLevel() <= (userCapabilities.get(questionSkill.getSkill_id()) + 2.5f)) { //&& questionSkill.getLevel() > (userCapabilities.get(questionSkill.getQuestion_id()) - 1)
 		    				canContinue = true;
 		    			} else {
 		    				canContinue = false;
